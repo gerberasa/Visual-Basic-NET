@@ -1,0 +1,21 @@
+' This code shows how to catch an exception.
+Try
+Console.WriteLine("We're going to divide 10 by 0 and see what happens...")
+Console.WriteLine()
+
+Dim i as Integer = 10
+Dim j as Integer = 0
+Dim k As Integer = i/j ' Error on this line. Control jumps to the catch block.
+
+Catch e As Exception  ' Perform code that deals with the exception
+                      ' or informs the user what occurred.
+        Console.WriteLine("The following error occurred:")
+        Console.WriteLine( e.Message )     ' Print the error message.
+        Console.WriteLine( e.Source )      ' Name of application or object
+                                           ' that caused the error
+        Console.WriteLine( e.StackTrace )  ' String that contains the stack 
+                                           ' trace for this exception
+Finally   ' This section is performed regardless of the above processing.
+        Console.WriteLine()
+        Console.WriteLine("This statement is always printed")
+End Try
