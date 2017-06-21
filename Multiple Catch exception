@@ -1,0 +1,15 @@
+    Dim a As Integer = 2147483647
+    Dim b As Integer = 0
+    Dim c As Integer = 0
+
+    Try
+      a += 1
+    Catch exc As DivideByZeroException
+      Console.WriteLine("Error: Divide by zero")
+    Catch exc As OverflowException
+      Console.WriteLine("Error: Overflow")
+    Catch exc As Exception
+      Console.WriteLine("Error: " & exc.Message)
+    Finally
+      Console.ReadLine()
+    End Try
