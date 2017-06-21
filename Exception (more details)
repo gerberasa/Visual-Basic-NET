@@ -1,0 +1,18 @@
+' Attempt to do some file processing.
+' This can cause a number of potential exceptions.
+' Note that you can use the specific exceptions to get extra information about that exception,
+' but this example focuses on showing control execution for those exceptions.
+
+Try
+File.Create("c:/temp/test.txt")  ' Can fail for a number of reasons
+
+Catch ioe As System.IO.IOException ' This error may occur if the Temp folder does not exist.
+Console.WriteLine("An IO error occurred. The c:\temp folder does not exist")
+
+Catch se As System.Security.SecurityException ' You do not have the appropriate permission
+                                              ' to take this action.
+Console.WriteLine("You don't have the security permissions to take this action!")
+
+Catch e As Exception    ' Catch all other exceptions.
+Console.WriteLine( e.ToString() )  ' Print the standard exception information.
+End Try
