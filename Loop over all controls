@@ -1,0 +1,10 @@
+Public Class Form1
+    Private str_temp As String
+    Private Sub Form1_Load(sender As System.Object, e As System.EventArgs) Handles MyBase.Load
+        str_temp = ""
+        For Each ctr As Control In Me.Controls
+            str_temp = str_temp & ctr.Name & vbCrLf
+        Next
+        MsgBox(str_temp)
+    End Sub
+End Class
