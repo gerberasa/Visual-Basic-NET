@@ -1,0 +1,103 @@
+Public Class Form1
+    Dim Query As String
+    'The variable con will hold the Connection Object
+    Dim con As New OleDb.OleDbConnection
+    Dim ds As New DataSet
+    Dim da As OleDb.OleDbDataAdapter
+
+    Dim value1 As String
+    Dim value2 As String
+    Dim value3 As String
+    Dim value4 As String
+    Dim value5 As String
+
+
+    Private Sub Button1_Click(sender As Object, e As EventArgs) Handles Button1.Click
+        'Set the con properties
+        Dim dbProvider As String
+        Dim dbSource As String
+        Dim MyDocumentsFolder As String
+        Dim TheDatabase As String
+        Dim FullDatabasePath As String
+        'dbProvider = "PROVIDER=Microsoft.Jet.OLEDB.4.0;"            ' For Old MS-ACCESS database (*.mdb)
+        dbProvider = "PROVIDER=Microsoft.ACE.OLEDB.12.0;"            ' For New MS-ACCESS database (*.accdb)
+        TheDatabase = "/database1.accdb"
+        MyDocumentsFolder = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments)
+        FullDatabasePath = MyDocumentsFolder & TheDatabase
+        dbSource = "Data Source = " & FullDatabasePath
+
+        con.ConnectionString = dbProvider & dbSource
+
+        con.Open()
+        MessageBox.Show("Database is now open")
+
+        '=====================================================================================================
+        'ADO.NET uses something called a DataSet to hold all of your information from the database 
+        '(You can also use a DataTable, if all you want to do Is read information, And Not have people write to your database.).
+        '
+        'But what's a Data Adapter?
+        'The Connection Object And the DataSet can't see each other. They need a go-between so that they can communicate. 
+        'This go - between Is called a Data Adapter. The Data Adapter contacts your Connection Object, And then executes a query that you set up. 
+        'The results of that query are then stored in the DataSet.
+        '
+
+        Query = "SELECT * FROM Table1"
+
+        da = New OleDb.OleDbDataAdapter(Query, con)
+        da.Fill(ds, "Bacon Sandwich")
+
+        'Now that the Data Adapter has selected all of the records from the table in our database, 
+        'we need somewhere to put those records - in the DataSet.
+        value1 = ds.Tables("Bacon Sandwich").Rows(0).Item(0).ToString
+        value2 = ds.Tables("Bacon Sandwich").Rows(0).Item(1).ToString
+        value3 = ds.Tables("Bacon Sandwich").Rows(0).Item(2).ToString
+        value4 = ds.Tables("Bacon Sandwich").Rows(0).Item(3).ToString
+        value5 = ds.Tables("Bacon Sandwich").Rows(0).Item(4).ToString
+        MsgBox(value1 & "/" & value2 & "/" & value3 & "/" & value4 & "/" & value5)
+
+        'we can explore dataset properties
+        MsgBox("Row count: " & ds.Tables("Bacon Sandwich").Rows.Count)
+
+        'We can also edit DataSet members
+        ds.Tables("Bacon Sandwich").Rows(0).Item(0) = CInt(1)
+        ds.Tables("Bacon Sandwich").Rows(0).Item(1) = CInt(11)
+        ds.Tables("Bacon Sandwich").Rows(0).Item(2) = CInt(111)
+        ds.Tables("Bacon Sandwich").Rows(0).Item(3) = CInt(1111)
+        ds.Tables("Bacon Sandwich").Rows(0).Item(4) = CInt(11111)
+        '
+        'BUT this edited DataSet is not yet COMMITED to the database
+        'now we update from DataSet to Database
+        UpdateToDatabaseAutomatically()                                             'Update to database automatically
+
+        'at last, close the database
+        con.Close()
+        MessageBox.Show("Database is now Closed")
+
+    End Sub
+
+    Sub UpdateToDatabaseManually()
+        '============== BEGIN SEND CHANGES TO DATABASE SERVER ===========================
+        'to update to database, you do this manually by query to database connection (use OleDbCommand)
+        Dim cmd As New OleDb.OleDbCommand
+        Query = "UPDATE Table1 SET [Datetime]=" & CInt(3) & ", [Price]=" & CInt(22) & ", [Bid]=" & CInt(222) & ", [Offer]=" & CInt(2222) & ", [Volume]=" & CInt(22222) & " WHERE [Datetime]=" & value1
+        MsgBox(Query)
+        With cmd
+            .Connection = con
+            .CommandText = Query
+            .ExecuteNonQuery()
+        End With
+        '============== END SEND CHANGES TO DATABASE SERVER =============================
+    End Sub
+
+    Sub UpdateToDatabaseAutomatically()
+        'To update to database from DataSet, we use automatic CommandBuilder ====================== this still have error/bug
+        '============== BEGIN SEND CHANGES TO DATABASE SERVER ===========================
+        Dim objCommandBuilder As OleDb.OleDbCommandBuilder = New OleDb.OleDbCommandBuilder(da)
+        da.Update(ds, "Bacon Sandwich")
+        Console.WriteLine("SQL Server updated successfully, Check Server explorer to see changes")
+        Console.ReadLine()
+        '============== END SEND CHANGES TO DATABASE SERVER =============================
+    End Sub
+
+
+End Class
