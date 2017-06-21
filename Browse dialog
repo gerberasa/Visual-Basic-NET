@@ -1,0 +1,17 @@
+    'Browse
+    Private Sub btnBrowse_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnBrowse.Click
+        With OpenFileDialog1
+            .InitialDirectory = "C:\"
+            .Filter = "Bitmaps (*.bmp)|*.bmp|GIFs (*.gif)|*.gif|JPEGs (*.jpg)|*.jpg|All Image File (*.jpg,*.bmp,*.gif)|*.jpg;*.bmp;*.gif"
+            .FilterIndex = 2
+        End With
+
+        If OpenFileDialog1.ShowDialog() = DialogResult.OK Then
+            With PictureBox1
+                .Image = Image.FromFile(Me.OpenFileDialog1.FileName)
+                .SizeMode = PictureBoxSizeMode.AutoSize
+            End With
+
+        End If
+        Me.Label1.Text = Me.OpenFileDialog1.FileName.ToString
+    End Sub
