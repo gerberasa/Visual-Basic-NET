@@ -1,0 +1,9 @@
+Sub OpenAndManipulate() 
+Dim xl0 As New Excel.Application 
+Dim xlw As New Excel.Workbook 
+Set xlw = xl0.Workbooks.Open("c:\somefile.xls") 
+xl0.Worksheets.Add xl0.ActiveSheet.Cells(1, 1) = "Hello" xl0.ActiveSheet.Cells(1, 2) = "World" xlw.Save 
+xlw.Close 
+Set xl0 = Nothing 
+Set xlw = Nothing 
+End Sub
