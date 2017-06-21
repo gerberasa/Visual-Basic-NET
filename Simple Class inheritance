@@ -1,0 +1,47 @@
+Public Class Form1
+    Private Sub Button1_Click(sender As Object, e As EventArgs) Handles Button1.Click
+        Dim a As New account(80)
+        MsgBox(a.acount_type)
+        Dim s As New savings(20)
+        MsgBox(s.acount_type)
+
+        a = s
+        MsgBox(a.acount_type)
+        MsgBox(s.acount_type)
+    End Sub
+End Class
+
+Public Class account
+    Private total As Integer = 0
+
+    Public Sub New(ByVal initial_sum As Integer)
+        total = initial_sum
+    End Sub
+
+    Public Sub withdrawl(ByVal amount As Integer)
+        If (amount > total) Then
+            total -= amount
+        End If
+    End Sub
+
+    Public Sub deposit(ByVal amount As Integer)
+        total += amount
+    End Sub
+
+    Public Overridable Function acount_type()
+        Return "common account"
+    End Function
+
+End Class
+
+Public Class savings
+    Inherits account
+
+    Public Sub New(ByVal amount As Integer)
+        MyBase.New(amount)
+    End Sub
+
+    Overrides Function acount_type()
+        Return "savings"
+    End Function
+End Class
