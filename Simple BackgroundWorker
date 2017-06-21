@@ -1,0 +1,52 @@
+Imports System.Threading
+
+Public Class Form1
+    Private Sub Button1_Click(sender As Object, e As EventArgs) Handles Button1.Click
+        Dim x As tee
+        x.startBackgroundTask()
+    End Sub
+End Class
+
+
+
+
+Public Class tee
+    Private Sub BackgroundWorker1_DoWork(ByVal sender As Object,
+    ByVal e As System.ComponentModel.DoWorkEventArgs) Handles BackgroundWorker1.DoWork
+        ' Add your code here
+
+    End Sub
+    Private EndedAt As String, StartedAt As String
+    Private tegutseb As Boolean = False, Notifieonend As Boolean
+    Private WithEvents BackgroundWorker1 As New System.ComponentModel.BackgroundWorker
+    Public Sub startBackgroundTask() ' This will start the backgroundworker
+        tegutseb = True
+        StartedAt = "Started : " & Format(Now, "h:mm:ss") & "." & Now.Millisecond
+        BackgroundWorker1.RunWorkerAsync()
+    End Sub
+    Private Sub BackgroundWorker1_RunWorkerCompleted(ByVal sender As Object,
+    ByVal e As System.ComponentModel.RunWorkerCompletedEventArgs) _
+    Handles BackgroundWorker1.RunWorkerCompleted ' Compleated
+        tegutseb = False
+        EndedAt = "Ended   : " & Format(Now, "h:mm:ss") & "." & Now.Millisecond
+        If Notifieonend = True Then MsgBox(Timestamp, , "Protsess Done")
+    End Sub
+    Public ReadOnly Property Timestamp() As String
+        Get
+            Return StartedAt & Chr(13) & EndedAt
+        End Get
+    End Property
+    Public ReadOnly Property IsWorking() As Boolean
+        Get
+            Return tegutseb
+        End Get
+    End Property
+    Public Property Notifie_on_end() As Boolean
+        Get
+            Return Notifieonend
+        End Get
+        Set(ByVal value As Boolean)
+            Notifieonend = value
+        End Set
+    End Property
+End Class
