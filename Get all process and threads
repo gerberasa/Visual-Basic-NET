@@ -1,0 +1,26 @@
+    Private Sub Button1_Click(sender As System.Object, e As System.EventArgs) Handles Button1.Click
+        Dim oAllProcess() As System.Diagnostics.Process
+        Dim oProcess As System.Diagnostics.Process
+        Dim str As String
+        Try
+            str = ""
+            oAllProcess = Process.GetProcesses()
+            For index1 = 0 To oAllProcess.Length - 6 Step 5
+                oProcess = oAllProcess(index1)
+                str = str & oAllProcess(index1).ProcessName & " " & oAllProcess(index1).Threads.Count & "     " & _
+                    oAllProcess(index1 + 1).ProcessName & " " & oAllProcess(index1 + 1).Threads.Count & "     " & _
+                    oAllProcess(index1 + 2).ProcessName & " " & oAllProcess(index1 + 2).Threads.Count & "     " & _
+                    oAllProcess(index1 + 3).ProcessName & " " & oAllProcess(index1 + 3).Threads.Count & "     " & _
+                    oAllProcess(index1 + 4).ProcessName & " " & oAllProcess(index1 + 4).Threads.Count & "     " & _
+                    oAllProcess(index1 + 5).ProcessName & " " & oAllProcess(index1 + 5).Threads.Count & vbCrLf
+
+                'oProcess = oAllProcess(index1).Threads.Count
+            Next
+            
+        Catch ex As Exception
+        Finally
+
+            MsgBox(str)
+        End Try
+
+    End Sub
