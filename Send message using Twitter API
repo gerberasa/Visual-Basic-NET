@@ -1,0 +1,32 @@
+Public Class Form1
+    Private Sub Button1_Click(sender As Object, e As EventArgs) Handles Button1.Click
+        If (SendMessage("username", "passwd", txtTo.Text, rtbMessage.Text)) Then
+            MessageBox.Show("Message sent successfully")
+        Else
+            MessageBox.Show("Error Send Message")
+        End If
+    End Sub
+
+    Private Function SendMessage(ByVal _Username As String, ByVal _Password As String, ByVal _To As String, ByVal _Message As String) As Boolean
+        Try
+            Dim _HttpWebRequest As Net.HttpWebRequest = Nothing
+            Dim _NetWorkCredential As Net.NetworkCredential = Nothing
+            Dim _WebResponse As Net.WebResponse = Nothing
+
+            _NetWorkCredential = New Net.NetworkCredential(_Username, _Password)
+            _HttpWebRequest = (Net.HttpWebRequest).Create("http://twitter.com/direct_messages/new.xml?user=" + _To + "&text=" + _Message)
+
+            With _HttpWebRequest
+                .Credentials = _NetWorkCredential
+                .ContentLength = 0
+                .ContentType = "application/x-www-form-urlencoded"
+                .Method = "POST"
+                _WebResponse = .GetResponse()
+            End With
+            Return True
+
+        Catch ex As Exception
+            Return False
+        End Try
+    End Function
+End Class
