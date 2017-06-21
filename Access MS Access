@@ -1,0 +1,43 @@
+Public Class Form1
+    Private Sub Button1_Click(sender As Object, e As EventArgs) Handles Button1.Click
+        database()
+    End Sub
+
+    Dim con As New OleDb.OleDbConnection
+    Dim ds As New DataSet
+    Dim da As OleDb.OleDbDataAdapter
+    Dim Sql As String
+
+    Sub database()
+        Sql = "SELECT * FROM myTable WHERE case_no='?'"
+        'Sql = "SELECT * FROM myTable"
+        'Sql = "UPDATE myTable SET description='DELETED' WHERE case_no='1'"
+
+        Try
+            ' Open connection with connection string, open a database file
+            Dim con As OleDb.OleDbConnection = New OleDb.OleDbConnection("PROVIDER=Microsoft.ACE.OLEDB.12.0;Data Source=Sample.accdb;Persist Security Info=True;Jet OLEDB:Database Password=passwd")
+            con.Open()
+
+            ' Prepare query command as OleDbCommand, to be used for execute
+            Dim cmd As OleDb.OleDbCommand = New OleDb.OleDbCommand(Sql, con)
+
+            ' Execute OleDbCommand, and receive result in data adapter (software cache)
+            Dim da As OleDb.OleDbDataAdapter = New OleDb.OleDbDataAdapter(cmd)
+
+            ' Prepare data set for presentation, and bind to DataGridView1
+            Dim ds As DataSet = New DataSet
+            da.Fill(ds, "Case Info")                            ' data adapter to fill to data set, and named data set as "Case Info"
+            DataGridView1.DataSource = ds.Tables("Case Info")   ' set DataGridView1.DataSource with data set "Case Info"
+
+        Catch ex As Exception
+            MsgBox(ex.Message)
+        End Try
+    End Sub
+
+    Private Sub Form1_FormClosed(sender As Object, e As FormClosedEventArgs) Handles MyBase.FormClosed
+        con.Close()
+        con = Nothing
+        da = Nothing
+        ds = Nothing
+    End Sub
+End Class
