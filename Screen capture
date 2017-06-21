@@ -1,0 +1,19 @@
+' Returns an image object that is a screenshot of the current virtual screen.
+
+Public Shared Function CaptureScreenImage() As Image
+
+        ' Get virtual screen dimensions (for multiple monitors)
+        Dim screenWidth As Integer = SystemInformation.VirtualScreen.Width
+        Dim screenHeight As Integer = SystemInformation.VirtualScreen.Height
+        Dim screenTop As Integer = SystemInformation.VirtualScreen.Top
+        Dim screenLeft As Integer = SystemInformation.VirtualScreen.Left
+
+        ' Setup a bitmap according to the virtual screen dimensions
+        Dim Bitmap As Bitmap = New Bitmap(screenWidth, screenHeight)
+
+        Dim g As Graphics = Graphics.FromImage(Bitmap)
+        g.CopyFromScreen(screenLeft, screenTop, 0, 0, New Size(screenWidth, screenHeight))
+
+        Return CType(Bitmap, Image)
+
+End Function
