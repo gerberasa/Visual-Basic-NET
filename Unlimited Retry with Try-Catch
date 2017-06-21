@@ -1,0 +1,15 @@
+Dim maxAttempt As Integer = 2
+
+For i As Integer = maxAttempt To 0 Step -1
+
+Try
+    ...
+    'Successful Quit
+    Exit For
+
+  Catch
+        Debug.Writeline(ex.message)
+     Thread.Sleep(2000)
+
+  End Try
+Next 
