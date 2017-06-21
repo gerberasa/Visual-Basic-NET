@@ -1,0 +1,47 @@
+Option Strict Off
+Public Class Form1
+    Private Sub Button1_Click(ByVal sender As System.Object, ByVal e As System.EventArgs)
+        Dim x As New Form
+        Dim y As New WebBrowser
+        y.Parent = x
+        y.Dock = DockStyle.Fill
+        AddHandler y.DocumentCompleted, AddressOf seda
+        x.ShowInTaskbar = True
+        x.WindowState = FormWindowState.Maximized
+        x.Show()
+        y.Visible = True
+        y.Navigate("www.google.com")
+    End Sub
+    Dim i As Integer
+    Sub seda(ByVal sender As Object, ByVal e As System.Windows.Forms.WebBrowserDocumentCompletedEventArgs)
+        i += 1
+        Select Case i
+            Case 1
+                Call pane(sender, "brains")
+                Call submit(sender, "btnG")
+            Case 2
+        End Select
+
+    End Sub
+    Private Sub pane(ByRef obj As WebBrowser, ByVal txt As String, Optional ByVal mis As String = "q")
+        If (obj.Document IsNot Nothing) Then
+            For Each a As System.Windows.Forms.HtmlElement In obj.Document.All.GetElementsByName(mis)
+                a.InnerText = txt
+            Next
+        End If
+    End Sub
+    Private Sub submit(ByRef obj As WebBrowser, Optional ByVal mis As String = "q")
+        If (obj.Document IsNot Nothing) Then
+            obj.Document.Forms(0).InvokeMember("submit")
+        End If
+    End Sub
+
+    Private Sub Form1_Load(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles MyBase.Load
+        Dim z As New Button
+        z.Parent = Me
+        z.Text = "Look for brains"
+        z.Dock = DockStyle.Fill
+        Me.Size = New Size(120, 60)
+        AddHandler z.Click, AddressOf Button1_Click
+    End Sub
+End Class
