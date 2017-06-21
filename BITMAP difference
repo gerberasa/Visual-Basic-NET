@@ -1,0 +1,24 @@
+''' <summary>
+''' Dieser Algorithmus führt eine Bitmap-Differenz-Analyse aus.
+''' Das heißt es werden 2 Bilder miteinerander verglichen und die Unterschiede
+''' zwischen diesen beiden Bildern werden in ein drittes Bild gezeichnet.
+''' </summary>
+''' <param name="Image1">Das Originalbild</param>
+''' <param name="Image2">Das Bild was sich vom Original unterscheidet</param>
+Public Function BmpDiff(ByRef Image1 As Bitmap, ByRef Image2 As Bitmap) As Bitmap
+    Dim Pixel1, Pixel2 As Color
+    Dim NewBitmap As New Bitmap(Image1.Width, Image1.Height)
+
+    For y As Integer = 0 To Image1.Height - 1
+        For x As Integer = 0 To Image1.Width - 1
+            Pixel1 = Image1.GetPixel(x, y)
+            Pixel2 = Image2.GetPixel(x, y)
+
+            If Pixel1.ToArgb <> Pixel2.ToArgb Then
+                NewBitmap.SetPixel(x, y, Pixel2)
+            End If
+        Next
+    Next
+
+    Return NewBitmap
+End Function
