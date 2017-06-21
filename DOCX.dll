@@ -1,0 +1,34 @@
+Public Class Form1
+
+    Private Sub Button1_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Button1.Click
+        'Create docx document
+        Dim document As Novacode.DocX = Novacode.DocX.Create("Mydocuments.doc")
+        'Create paragraph p1,p2 and p3 with text
+        Dim p1 As Novacode.Paragraph = document.InsertParagraph("This is paragraph p1")
+        Dim p2 As Novacode.Paragraph = document.InsertParagraph("This is paragraph p2")
+        Dim p3 As Novacode.Paragraph = document.InsertParagraph("This is paragraph p3\nLine 1\nLine 2\nLine 3")
+        'Save this document to disk.
+        document.Save()
+        Console.WriteLine("\Created: docs\MyDocuments.docx")
+
+        'Append some text to paragraph p1 and add formatting.
+        '        p1.Append("Hello World!^011Hello World!")
+        '        p1.Font(New FontFamily("Times New Roman"))
+        '        p1.FontSize(32)
+        '        p1.Color(Color.Blue)
+        '        p1.Bold()
+
+        'Make Paragraph p2 flow right to left. Default is left to right.
+        '        p2.Direction = Novacode.Direction.RightToLeft
+        ' You don't need to manually set the text direction foreach Paragraph, you can just call this function.
+        '        document.SetDirection(Novacode.Direction.RightToLeft)
+
+        ' Indent only the first line of the Paragraph p3.
+        '        p3.IndentationFirstLine = 1.0F
+
+        'Save this document to disk.
+        '        document.Save()
+        Console.WriteLine("\Created: MyDocuments.docx")
+
+    End Sub
+End Class
