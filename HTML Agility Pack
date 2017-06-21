@@ -1,0 +1,149 @@
+Public Class Form1
+    'Need to install HTML Agility Pack from NuGet Visual Studio 2017
+    'Project/Manage NuGet Packages.../HTML Agility Pack
+    Private Sub Button1_Click(sender As Object, e As EventArgs) Handles Button1.Click
+        Dim html As String = "<!DOCTYPE html>" & vbCrLf &
+"<html>" & vbCrLf &
+"<body>" & vbCrLf &
+"	<h1>This is <b>bold</b> heading</h1>" & vbCrLf &
+"	<p>This is <u>underlined</u> paragraph</p>" & vbCrLf &
+"	<h2>This is <i>italic</i> heading</h2>" & vbCrLf &
+"</body>" & vbCrLf &
+"</html>"
+
+        Dim htmlDoc As New HtmlAgilityPack.HtmlDocument()
+        htmlDoc.LoadHtml(html)
+
+        Dim htmlBody As HtmlAgilityPack.HtmlNode = htmlDoc.DocumentNode.SelectSingleNode("//body")
+
+        Console.WriteLine(htmlBody.OuterHtml)
+    End Sub
+
+    Private Sub Button2_Click(sender As Object, e As EventArgs) Handles Button2.Click
+        Dim html As String = "http://html-agility-pack.net/"
+
+        Dim Web As HtmlAgilityPack.HtmlWeb = New HtmlAgilityPack.HtmlWeb()
+
+        Dim htmlDoc As HtmlAgilityPack.HtmlDocument = Web.Load(html)
+
+        Dim node As HtmlAgilityPack.HtmlNode = htmlDoc.DocumentNode.SelectSingleNode("//head/title")
+
+        Console.WriteLine("Node Name: " + node.Name + "\n" + node.OuterHtml)
+    End Sub
+
+    Private Sub Button3_Click(sender As Object, e As EventArgs) Handles Button3.Click
+        Dim html As String = "<TD class=texte width=""50%"">" & vbCrLf &
+"			<DIV align=right>Name :<B> </B></DIV>" & vbCrLf &
+"		</TD>" & vbCrLf &
+"		<TD width=""50%"">" & vbCrLf &
+"    		<INPUT class=box value=John maxLength=16 size=16 name=user_name>" & vbCrLf &
+"    		<INPUT class=box value=Tony maxLength=16 size=16 name=user_name>" & vbCrLf &
+"    		<INPUT class=box value=Jams maxLength=16 size=16 name=user_name>" & vbCrLf &
+"		</TD>" & vbCrLf &
+"		<TR vAlign=center>"
+
+        Dim htmlDoc As New HtmlAgilityPack.HtmlDocument()
+        htmlDoc.LoadHtml(html)
+
+        'The following example selects the first node matching the XPath expression using SelectNodes method.
+        Dim name As String = htmlDoc.DocumentNode.SelectNodes("//td/input").First().Attributes("value").Value
+        Console.WriteLine(name)
+
+        'The following example selects all nodes which are matching the XPath expression.
+        Dim htmlNodes As HtmlAgilityPack.HtmlNodeCollection = htmlDoc.DocumentNode.SelectNodes("//td/input")
+        For Each node In htmlNodes
+            Console.WriteLine(node.Attributes("value").Value)
+        Next
+
+    End Sub
+
+    Private Sub Button4_Click(sender As Object, e As EventArgs) Handles Button4.Click
+        Dim html As New HtmlAgilityPack.HtmlDocument()
+        html.LoadHtml(New Net.WebClient().DownloadString("http://www.asp.net"))
+        Dim root = html.DocumentNode
+        Dim Nodes = root.Descendants()
+        Dim totalNodes = Nodes.Count()
+
+        Console.WriteLine(root.ToString)
+        For Each node In Nodes
+            Console.WriteLine(node.InnerText)
+        Next
+        Console.WriteLine(totalNodes.ToString)
+
+        Dim anchors = root.Descendants("a")
+        Dim unorderedLists = root.Descendants("ul")
+        For Each node In anchors
+            Console.WriteLine(node.InnerText)
+        Next
+        For Each node In unorderedLists
+            Console.WriteLine(node.InnerText)
+        Next
+
+    End Sub
+
+    Private Sub Button5_Click(sender As Object, e As EventArgs) Handles Button5.Click
+        'Howto get text data from website, with narrowing down after tag DIV class "module-profile-recognition"
+        Dim html = New HtmlAgilityPack.HtmlDocument()
+        html.LoadHtml(New Net.WebClient().DownloadString("http://forums.asp.net/members/Mikesdotnetting.aspx"))
+        Dim root = html.DocumentNode
+        Dim p = root.Descendants().Where(Function(n) n.GetAttributeValue("class", "").Equals("module-profile-recognition")).[Single]().Descendants("p").[Single]()
+        Dim content = p.InnerText
+        Dim points = System.Text.RegularExpressions.Regex.Match(content, "\d+").Value
+        Console.WriteLine("Data parsed: " & points)
+    End Sub
+
+    Private Sub Button6_Click(sender As Object, e As EventArgs) Handles Button6.Click
+        Dim url As String = "http://html-agility-pack.net/"
+        Dim webGet = New HtmlAgilityPack.HtmlWeb()
+        Dim document = webGet.Load(url)
+        'The Load method returns an HtmlDocument object. 
+        'In the above code snippet we've assigned this returned object to the local variable document. 
+        'The HtmlDocument Class represents a complete HTML document And contains a DocumentNode Property, 
+        'which returns an HtmlNode object that represents the root node of the document.
+
+        'The HtmlNode class has several germane properties worth noting. There are properties for traversing the DOM, including:
+        '   - ParentNode,
+        '   - ChildNodes,
+        '   - NextSibling, And
+        '   - PreviousSibling
+        'There are properties For determining information about the node itself, such as
+        'Name -gets Or sets the node's name. For HTML elements this property returns (or assigns) the name of the tag - "body" for the <body> tag,
+        '"p" for a <p> tag, and so on.
+        'Attributes -returns the collection Of attributes For this element, If any.
+        '   - InnerHtml -gets Or sets the HTML content within the node.
+        '   - InnerText -returns the text within the node.
+        '   - NodeType -indicates the type Of the node. Can be Document, Element, Comment, Or Text.
+        'There are also methods For retrieving particular nodes relative To this one. For instance, the Ancestors method 
+        'returns a collection of all ancestor nodes. And the SelectNodes method returns a collection of nodes that match a specified XPath expression.
+        'Given all Of these methods And properties, there are a variety of ways you could get a list of all <meta> tags 
+        'in the HTML document. For this demo I decided to use the SelectNodes method. 
+        'The statement below calls the SelectNodes method of the document object's DocumentNode property, 
+        'Using the XPath expression "//meta", which returns all Of the <meta> tags In the document.
+        Dim metaTags = document.DocumentNode.SelectNodes("//meta")
+        'If there are no <meta> tags In the document Then, at this point, metaTags will be null. 
+        'But If there are one Or more <meta> tags Then metaTags will be a collection Of matching HtmlNode objects. 
+        'We can enumerate these matching nodes an display their attributes.
+
+        If metaTags IsNot Nothing Then
+            For Each item In metaTags
+                If (item.Attributes("name") IsNot Nothing And item.Attributes("content") IsNot Nothing) Then
+                    Console.WriteLine(item.Attributes("name").Value & " - " & item.Attributes("content").Value)
+                End If
+            Next
+        End If
+
+
+    End Sub
+
+    Private Sub Button7_Click(sender As Object, e As EventArgs) Handles Button7.Click
+        Dim url As String = "http://html-agility-pack.net/"
+        Dim webGet = New HtmlAgilityPack.HtmlWeb()
+        Dim document = webGet.Load(url)
+        Dim Nodes = document.DocumentNode.Descendants()
+
+        For Each item As HtmlAgilityPack.HtmlNode In Nodes
+            Console.WriteLine(item.InnerText)
+        Next
+
+    End Sub
+End Class
