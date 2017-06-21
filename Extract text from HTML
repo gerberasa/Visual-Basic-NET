@@ -1,0 +1,7 @@
+Dim strRegexScript As String = "(?m)<body[^>]*>(\w|\W)*?</body[^>]*>"
+        Dim strRegex As String = "<[^>]*>"
+        Dim strMatchScript As String = String.Empty
+        Dim matchText As System.Text.RegularExpressions.Match = System.Text.RegularExpressions.Regex.Match(HTML, strRegexScript, System.Text.RegularExpressions.RegexOptions.IgnoreCase)
+        strMatchScript = matchText.Groups(0).Value
+        Dim strPureText As String = System.Text.RegularExpressions.Regex.Replace(strMatchScript, strRegex, String.Empty, System.Text.RegularExpressions.RegexOptions.IgnoreCase)
+        Dim result As String = strPureText
